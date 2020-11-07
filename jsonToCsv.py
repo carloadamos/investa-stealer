@@ -1,35 +1,76 @@
-# Python program to convert 
-# JSON file to CSV 
+import csv
+import json
+import requests
+import calendar
+import time
+from constants.stocklist import test_list
 
-import json 
-import csv 
+# Start of test - 20160101
+ots = '1451581261'
+cts = calendar.timegm(time.gmtime())
+volumeArray = []
+valueArray = []
 
-# Opening JSON file and loading the data 
-# into the variable data 
-with open('history.json') as json_file: 
-	data = json.load(json_file) 
+for stock in test_list:
+    i = 0
+    j = 0
+    volumeApi = 'https://api.kisschart.com/api/chart/history?symbol={0}&resolution=D&from={1}&to={2}&firstDataRequest=true'
+    valueApi = 'https://api.kisschart.com/api/chart/history?symbol={0}%23VALUE&resolution=D&from={1}&to={2}&firstDataRequest=true'
 
-history_data = data['c'] 
+    # OHLC, timestamp and Volume
+    ohlcVolume = requests.get(volumeApi.format(stock, ots, cts))
+    jsonVolume = ohlcVolume.content.decode('utf8').replace("'", '"')
+    volumeJson = json.loads(jsonVolume)
 
-# now we will open a file for writing 
-data_file = open('history.csv', 'w') 
+    # Volume
+    openPrice = volumeJson['o']
+    high = volumeJson['h']
+    low = volumeJson['l']
+    close = volumeJson['c']
+    volume = volumeJson['v']
+    volume_time_stamp = volumeJson['t']
 
-# create the csv writer object 
-csv_writer = csv.writer(data_file) 
+    # OHLC, timestamp and Value
+    ohlcValue = requests.get(valueApi.format(stock, ots, cts))
+    jsonValue = ohlcValue.content.decode('utf8').replace("'", '"')
+    valueJson = json.loads(jsonValue)
 
-# Counter variable used for writing 
-# headers to the CSV file 
-count = 0
+    # Value
+    value = valueJson['v']
+    value_time_stamp = valueJson['t']
 
-# for emp in history_data: 
-	# if count == 0: 
+    # Volume Loop
+    for time in volume_time_stamp:
+        ohlctVolume = [time, openPrice[i], high[i],
+                       low[i], close[i], volume[i]]
+        volumeArray.append(ohlctVolume)
 
-	# 	# Writing headers of CSV file 
-	# 	header = emp.keys() 
-	# 	csv_writer.writerow(header) 
-	# 	count += 1
+        # for x in volumeArray:
+        #     print(x)
 
-	# Writing data of CSV file 
-csv_writer.writerow(history_data) 
+        i = i + 1
 
-data_file.close() 
+        # Value Loop
+    for time in value_time_stamp:
+        ohlctValue = [time, value[j]]
+        valueArray.append(ohlctValue)
+
+        # for x in valueArray:
+        # 		print(x)
+
+        j = j + 1
+
+    for vol in volumeArray:
+        for val in valueArray:
+            if vol[0] == val[0]:
+                vol.append(val[1])
+
+    for x in volumeArray:
+        print(x)
+
+# print(stockArray)
+
+# data_file = open(f"{stock}.csv", "w")
+# writer = csv.writer(data_file)
+
+# writer.writerow(openPrice)
