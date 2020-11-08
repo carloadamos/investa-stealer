@@ -132,15 +132,36 @@ stock_list = [
     # 'STR',
     # 'SUN', redo
     # 'TBGI', redo
-    'TECH',
-    'TEL',
-    'TUGS',
-    'URC',
-    'VITA',
-    'VUL',
-    'WEB',
-    'WPI',
-    'X',
-    'ZHI']
+    # 'TECH',
+    # 'TEL',
+    # 'TUGS',
+    # 'URC',
+    # 'VITA',
+    # 'VUL',
+    # 'WEB',
+    # 'WPI',
+    # 'X',
+    # 'ZHI'
+    # Requeue the following:
+    '2GO',
+    'ABA',
+    'ABG',
+    'SUN',
+    'TBGI',
+    'ALLHC',
+    'ANI',
+    'AP',
+]
 
 test_list = ['2GO']
+
+remove_list = [
+    '2GO',
+    'ABA',
+    'ABG',
+    'SUN',
+    'TBGI',
+    'ALLHC',
+    'ANI',
+    'AP',
+]
