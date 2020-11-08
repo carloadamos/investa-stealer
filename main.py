@@ -8,14 +8,15 @@ import math
 from AlmaIndicator import ALMAIndicator
 from constants.stocklist import stock_list
 from constants.stocklist import remove_list
+from stockstats import StockDataFrame
 
 # Database
 import pymongo
 from flask import Flask
 from flask_cors import CORS
 
-# Start of test - 20160101
-ots = '1451581261'
+# Start of test - 20150101
+ots = '1420088052'
 cts = calendar.timegm(time.gmtime())
 volumeArray = []
 valueArray = []
@@ -32,8 +33,13 @@ def compute_indicators(list):
     df['ma100'] = df.close.rolling(100).mean()
     df['alma'] = alma_indicator.alma()
 
+    sdf = StockDataFrame.retype(df)
+    sdf.get('macd')
+    # In case I decided to use sdf to formulate sma
+    # sdf.get('close_20_sma')
     result = df.to_json(orient="records")
     parsed = json.loads(result)
+
     # temporary solution
     # should have gui to trigger delete
     # should also implement upsert
