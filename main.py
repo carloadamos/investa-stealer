@@ -23,7 +23,8 @@ volumeArray = []
 valueArray = []
 
 # Database
-connection_url = 'mongodb+srv://admin:admin@cluster0.70gug.mongodb.net/exercise-tracker?retryWrites=true&w=majority'
+# connection_url = 'mongodb+srv://admin:admin@cluster0.70gug.mongodb.net/exercise-tracker?retryWrites=true&w=majority'
+connection_url = 'mongodb://localhost:27017/'
 client = pymongo.MongoClient(connection_url)
 Database = client.get_database('stock-analyzer')
 stocks_table = Database.stocks
@@ -42,6 +43,7 @@ def compute_indicators(list):
                   'high', 'low', 'close', 'volume', 'value']
     alma_indicator = ALMAIndicator(close=df['close'])
 
+    df['volume20'] = df.volume.rolling(20).mean()
     df['ma20'] = df.close.rolling(20).mean()
     df['ma50'] = df.close.rolling(50).mean()
     df['ma100'] = df.close.rolling(100).mean()
