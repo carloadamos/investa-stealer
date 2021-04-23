@@ -1,2 +1,2 @@
-# investa-stealer
-Python program to get stock data from investa
+# stocks-vacuum
+Python program to get stock data from any source
